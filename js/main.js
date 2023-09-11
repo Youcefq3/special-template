@@ -159,11 +159,47 @@ window.onscroll = function() {
 
 let imgs = document.querySelectorAll(".gallery .img-holder img");
 
-imgs.forEach(img => {
+imgs.forEach((img,index) => {
     img.addEventListener("click" , (e) => {
-        let popOverlay = document.createElement("div")
-        popOverlay.className = "pop-overlay"
-        console.log(popOverlay)
+        // Create pop-up Overlay
+        let popupOverlay = document.createElement("div")
+        
+        popupOverlay.className = "popup-overlay";
+
+        // Create Title
+
+        let imgTitle = document.createElement('h1')
+        
+        imgTitle.className = "img-label"
+
+        imgTitle.innerText = `image-0${index + 1}`
+
+        // Create pop-up Image
+        let imgHolder = document.createElement("div")
+        
+        imgHolder.className = "popup-image";
+
+        // Append Image
+
+        let popupImage = document.createElement("img")
+        
+        
+        popupImage.src = img.src
+        
+        imgHolder.prepend(imgTitle)
+
+        imgHolder.append(popupImage)
+        
+        document.body.append(imgHolder)
+
+        document.body.append(popupOverlay)
+        
+        document.addEventListener("click" , (e) => {
+            if (e.target == popupOverlay) {
+                e.target.remove();
+                imgHolder.remove()
+            }
+        })
     })
 })
 
