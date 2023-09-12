@@ -5,25 +5,32 @@ function reset(obj,targetClass) {
     })
 }
 
-// Add Transition to each Element with main-color
-
-console.log(Event)
-
-// Landing Background Loop
-
-let landing = document.querySelector(".landing");
-
-
+// Add Active Class To Current Link
 
 let navigationList = document.querySelectorAll(".header a");
-
-// Add Active Class To Current Link
 navigationList.forEach((ele,index,parent) => {
     ele.onclick = () => {
         reset(parent, "active");
         ele.classList.add("active");
     }
 });
+
+// Landing Background Loop
+
+let landing = document.querySelector(".landing");
+
+
+function imgsLoop(){
+let imgsArr = [
+"url(../imgs/background-01.jpg)" 
+,"url(../imgs/background-02.jpg)" 
+, "url(../imgs/background-03.jpg)"
+,"url(../imgs/background-04.jpg)"
+];
+let random = Math.floor(Math.random() * imgsArr.length);
+landing.style.backgroundImage = imgsArr[random];
+}
+
 
 // Start Settings
 
@@ -35,9 +42,18 @@ let settingsBtn = document.querySelector(".settings-btn i");
 
 
 settingsBtn.onclick = function() {
-    settings.classList.toggle("active")
+    settings.classList.toggle("open");
     this.classList.toggle("fa-spin");
-}
+    // Remove Open Class From Settings When clicking outside of it
+    document.addEventListener("click" ,  (e) => {
+        if (!settings.contains(e.target)) {
+            // Remove Open
+            settings.classList.remove("open");
+            // Remove Active
+            this.classList.remove("active");
+        }
+    })
+};
 
 let colorOptions = document.querySelectorAll("ul.colors li");
 
@@ -51,7 +67,9 @@ colorOptions.forEach((li) => {
     li.onclick = function() {
         // Add Color To Local Storage
         window.localStorage.setItem("mainColor" , `${this.dataset.color}`);
+
         document.documentElement.style.setProperty("--main-color" , `${window.localStorage.getItem("mainColor")}`);
+        
         // Add Active Class Only To Current Target
         reset(colorOptions,"active");
         this.classList.add("active");
@@ -77,18 +95,10 @@ document.documentElement.style.setProperty("--main-color" , `${window.localStora
 let backgroundLoop;
 
 function backgroundImageLoop() {
-        backgroundLoop = setInterval(
-            () => {
-    let imgsArr = [
-            "url(../imgs/background-01.jpg)" 
-            ,"url(../imgs/background-02.jpg)" 
-            , "url(../imgs/background-03.jpg)"
-            ,"url(../imgs/background-04.jpg)"
-    ]
-    let random = Math.floor(Math.random() * imgsArr.length);
-    landing.style.backgroundImage = imgsArr[random];
-},7000)
+        backgroundLoop = setInterval(imgsLoop,7000)
 }
+
+imgsLoop()
 
 let toggleSwitch = document.querySelector(".toggle-switch .random-background ")
 
@@ -149,9 +159,7 @@ window.onscroll = function() {
         })
     }
 }
-// console.log(`skillsOffHeight ==> ${skillsOffHeight}`)
-// console.log(`skillsoffTop ==> ${skillsoffTop}`)
-// console.log(`windowHeight ==> ${windowHeight}`)
+
 
 // End About
 
@@ -204,3 +212,40 @@ imgs.forEach((img,index) => {
 })
 
 // end Pop-up 
+
+// Start Nav Bullets
+
+let navBullets = document.querySelectorAll("aside .bullet")
+
+scrollingToSect(navBullets,false)
+
+scrollingToSect(document.querySelectorAll(".header a"),true)
+
+// navBullets.forEach((bullet) => {
+//     // Click Events On Bullet
+//     bullet.addEventListener("click" , function(e) {
+//         document.querySelector(`${e.target.dataset.section}`).scrollIntoView({
+
+//             behavior: "smooth"
+        
+//         })
+//     })
+// })
+
+function scrollingToSect(elements,preventDefault) {
+    elements.forEach((ele) => {
+        // Click Events On Bullet
+        ele.addEventListener("click" , function(e) {
+            if (preventDefault) {
+                e.preventDefault();
+            }
+            document.querySelector(`${e.target.dataset.section}`).scrollIntoView({
+    
+                behavior: "smooth"
+            
+            })
+        })
+    })
+}
+
+// End Nav Bulletss
